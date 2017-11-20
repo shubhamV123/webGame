@@ -1,5 +1,5 @@
 # jwt-NodeJS
-A simple jwt based mock authentication in nodeJs as well as image thumbnail generation.
+A simple jwt based mock authentication in nodeJs as well as image thumbnail generation from public url.
 
 ## Installation
 This is a [Node.js](https://nodejs.org/en/) based application.
@@ -29,7 +29,7 @@ Or else simply type:
 $ node index.js
 ```
 
-##Login Credentials
+## Login Credentials
 
 Since it is a mock authentication. You can either use any of these credentials for login:
 
