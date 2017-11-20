@@ -9,6 +9,12 @@ Node.js 0.10 or higher is required.
 
 Once node installation is done.
 
+Download or clone the project:
+
+```bash
+$ git clone https://github.com/shubhamV123/jwt-NodeJS.git
+```
+
 Install dependencies:
 
 ```bash
