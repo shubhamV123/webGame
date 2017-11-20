@@ -1,0 +1,26 @@
+{
+  "name": "testing",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "connect-flash": "^0.1.1",
+    "express": "^4.16.2",
+    "express-handlebars": "^3.0.0",
+    "express-jwt": "^5.3.0",
+    "express-session": "^1.15.6",
+    "jimp": "^0.2.28",
+    "jsonpatch": "^3.0.1",
+    "jsonwebtoken": "^8.1.0",
+    "localStorage": "^1.0.3",
+    "lodash": "^4.17.4",
+    "passport": "^0.4.0",
+    "passport-jwt": "^3.0.1"
+  }
+}

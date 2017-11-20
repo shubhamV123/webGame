@@ -1,0 +1,18 @@
+<h1>Welcome</h1>
+<div style="float:right">
+  <a href="/logout"><button>Logout</button></a>
+</div>
+<form  method="post" action="/create">
+<div class="form-group">
+    <label for="exampleInputEmail1">Enter Valid Url:</label>
+    <input type="text" class="form-control" name="url" aria-describedby="emailHelp" placeholder="Enter public url">
+    <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </div>
+  </form>
+  {{#if image}}
+  <h3>Your generated thumbnail:</h3>
+    <img src="images/{{image}}" alt="">
+    {{else}}
+    <h3>Your thumbnail will be generated down below:</h3>
+  {{/if}}
