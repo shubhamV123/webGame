@@ -9,7 +9,6 @@ module.exports = (passport) => {
     jwtOptions.jwtFromRequest = ExtractJwt.fromHeader('authorization');
     jwtOptions.secretOrKey = config.jwtSecret;
     var strategy = new JwtStrategy(jwtOptions, function(jwt_payload, next) {
-      console.log('payload received', jwt_payload);
       // usually this would be a database call:
       var user = users[_.findIndex(users, {id: jwt_payload.id})];
       if (user) {
