@@ -1,13 +1,9 @@
-const _ = require("lodash");
-const express = require("express");
+const _ = require('lodash');
+const express = require('express');
 const session = require('express-session');
-const bodyParser = require("body-parser");
-const jwt = require('jsonwebtoken');
+const bodyParser = require('body-parser');
 const exphbs = require('express-handlebars');
-const passport = require("passport");
-const passportJWT = require("passport-jwt");
-const request = require('request');
-const localStorage = require('localStorage');
+const passport = require('passport');
 const flash = require('connect-flash');
 const app = express();
 //Middlewares
