@@ -72,7 +72,7 @@ module.exports = (app, passport) => {
             res.redirect('/create');
       }
       if(image!=undefined){
-      image.resize(100, 100)            // resize                           
+      image.resize(50, 50)            // resize                           
       .write("public/images/thumbnail"+ i +"."+image.getExtension(),(err) =>{
         if(err){
           req.flash('errorMsg', 'Error in downloading');
