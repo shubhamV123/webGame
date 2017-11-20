@@ -1,4 +1,4 @@
-const _ = require("lodash");
+const _ = require('lodash');
 const passport = require('passport');
 const jwt = require('jsonwebtoken');
 const users = require('../models/user');
