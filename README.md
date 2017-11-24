@@ -58,7 +58,7 @@ password: 'test
 
 This app is centralized with logging system.This app uses simple and universal logging library 
 i.e [winston](https://github.com/winstonjs/winston).So just dont use console.log as it would not be 
-benficial for debugging/monitoring your application.This app logs all your logging action which you want and it also saves your logs for future refrence.Beside this it generate two log files: One contain all logs and another contain only error log.
+benficial for debugging/monitoring your application.This app logs all your logging action which you want and it also saves your logs for future reference.Besides this it generate two log files: One contain all logs and another contain only error logs.
 
 More information you can find [here](https://github.com/winstonjs/winston)
 
