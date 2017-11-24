@@ -53,3 +53,21 @@ or
 name: 'test',
 password: 'test                           
 ```
+
+## Logging/Monitoring
+
+This app is centralized with logging system.This app uses simple and universal logging library 
+i.e [winston](https://github.com/winstonjs/winston).So just dont use console.log as it would not be 
+benficial for debugging/monitoring your application.This app logs all your logging action which you want and it also saves your logs for future refrence.Beside this it generate two log files: One contain all logs and another contain only error log.
+
+More information you can find [here](https://github.com/winstonjs/winston)
+
+## Extra Notes
+
+To use javascript linter on this project download eslint globally :
+
+```bash
+npm install -g eslint                          
+```
+
+After that you can test application using eslint filename.js
