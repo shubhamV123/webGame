@@ -5,6 +5,7 @@ const users = require('../models/user');
 const config = require('../config/config');
 const localStorage = require('localStorage');
 const Jimp = require("jimp");
+const jsonpatch = require('fast-json-patch');
 
 module.exports = (app, passport) => {
   app.get("/", (req, res) => {
@@ -92,16 +93,31 @@ module.exports = (app, passport) => {
   });
   });
   app.get("/create", passport.authenticate('jwt', {session: false}), (req, res) => {
-    // const user = req.user;
+    const user = req.user;
     res.render('create');
   });
   app.get("/secret", passport.authenticate('jwt', {
     session: false
   }), (req, res) => {
-    const user = req.user;
+    let user = req.user;
     res.render('secret', {
       user: user
     });
+  });
+  app.get("/patch", passport.authenticate('jwt', {session: false}), (req, res) => {
+    let user = req.user;
+    if(req.user.email!=undefined){
+      let patches = [
+          { op: "remove", path: "/email" },
+          
+        ];
+        user = jsonpatch.applyPatch(user, patches).newDocument;
+    }
+    else{
+    let patches = [{op: "add", path: "/email", value: "johnChanged@email.com"}];
+    user = jsonpatch.applyPatch(user, patches).newDocument;
+    }
+    res.redirect('/secret')
   });
   app.get('/logout', (req, res) => {
     localStorage.clear();
