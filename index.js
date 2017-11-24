@@ -5,8 +5,40 @@ const bodyParser = require('body-parser');
 const exphbs = require('express-handlebars');
 const passport = require('passport');
 const flash = require('connect-flash');
+const winston = require('winston');
+const fs = require('fs');
+const env = process.env.NODE_ENV || 'development';
+const logDir = 'log';
 const app = express();
+
+
 //Middlewares
+if (!fs.existsSync(logDir)) {
+  fs.mkdirSync(logDir);
+}
+const tsFormat = () => (new Date()).toLocaleTimeString();
+let logger = new(winston.Logger)({
+  transports: [
+    new(winston.transports.Console)({
+      level: 'debug',
+      timestamp: tsFormat,
+      colorize: true,
+      json: true
+    }),
+    new(winston.transports.File)({
+      name: 'all-file',
+      filename: `${logDir}/all-file.log`,
+      level: 'debug',
+      json: true
+    }),
+    new(winston.transports.File)({
+      name: 'error-file',
+      filename: `${logDir}/error-file.log`,
+      level: 'error',
+      json: true
+    })
+  ]
+});
 app.use(passport.initialize());
 require('./config/passport')(passport);
 app.engine('handlebars', exphbs({
@@ -30,7 +62,7 @@ app.use((req, res, next) => {
   res.locals.error = req.flash('error');
   next();
 });
-require('./routes/routes')(app, passport);
+require('./routes/routes')(app, passport, logger);
 app.listen(3000, () => {
   console.log("Express running");
 });

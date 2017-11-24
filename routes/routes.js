@@ -7,7 +7,7 @@ const localStorage = require('localStorage');
 const Jimp = require("jimp");
 const jsonpatch = require('fast-json-patch');
 
-module.exports = (app, passport) => {
+module.exports = (app, passport,logger) => {
   app.get("/", (req, res) => {
     if (localStorage.getItem('token') !== null) {
       res.redirect('/secret');
@@ -100,6 +100,8 @@ module.exports = (app, passport) => {
     session: false
   }), (req, res) => {
     let user = req.user;
+    logger.info(user);
+    logger.error('Warning message');
     res.render('secret', {
       user: user
     });
