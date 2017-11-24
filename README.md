@@ -70,4 +70,4 @@ To use javascript linter on this project download eslint globally :
 npm install -g eslint                          
 ```
 
-After that you can test application using eslint filename.js
+After that you can lint your application using eslint filename.js
