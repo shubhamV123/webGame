@@ -6,7 +6,7 @@ const passport = require('passport');
 const flash = require('connect-flash');
 const app = express();
 const logger = require('./utils/logger');
-
+const port = process.env.PORT || 3000;
 //Middlewares
 require('./config/passport')(passport);
 app.use(passport.initialize());
@@ -34,6 +34,6 @@ app.use((req, res, next) => {
 });
 require('./apis/login')(app, passport, logger);
 require('./routes/routes')(app, passport, logger);
-app.listen(3000, () => {
+app.listen(port, () => {
 	logger.info('Express running');
 });
