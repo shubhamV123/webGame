@@ -2,6 +2,7 @@ const _ = require('lodash');
 const jwt = require('jsonwebtoken');
 const users = require('../models/user');
 const config = require('../config/config');
+const urlConfig = require('../config/urlConfig');
 const localStorage = require('localStorage');
 const Jimp = require('jimp');
 const jsonpatch = require('fast-json-patch');
@@ -22,7 +23,7 @@ module.exports = (app, passport,logger) => {
 			password:req.body.password
 		};
 		request({
-			url: 'http://localhost:3000/api/login',
+			url: urlConfig.url,
 			method: 'POST',
 			json: true,   // <--Very important!!!
 			body: name
