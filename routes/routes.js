@@ -5,6 +5,7 @@ const config = require('../config/config');
 const localStorage = require('localStorage');
 const Jimp = require('jimp');
 const jsonpatch = require('fast-json-patch');
+var request = require('request');
 
 module.exports = (app, passport,logger) => {
 	app.get('/', (req, res) => {
@@ -15,36 +16,28 @@ module.exports = (app, passport,logger) => {
 		}
 	});
 
-	app.post('/login', (req, res, next) => {
-
-		if (req.body.name == '' || req.body.password == '') {
-			req.flash('errorMsg', 'Please fill all fields');
-			res.redirect('/');
-		} else {
-			let name = req.body.name;
-			// let password = req.body.password;
-			// usually this would be a database call:
-			let user = users[_.findIndex(users, {
-				name: name
-			})];
-			if (user === undefined) {
-				req.flash('errorMsg', 'no such user found');
+	app.post('/login',(req,res,next) =>{
+		var name = {
+			name:req.body.name,
+			password:req.body.password
+		};
+		request({
+			url: 'http://localhost:3000/api/login',
+			method: 'POST',
+			json: true,   // <--Very important!!!
+			body: name
+		}, function (error, response){
+			if(response.body.error == true){
+				req.flash('errorMsg',response.body.message);
 				res.redirect('/');
-			} else {
-				if (user.password === req.body.password) {
-					let payload = {
-						id: user.id
-					};
-					let token = jwt.sign(payload, config.jwtSecret);
-					localStorage.setItem('token', token);
-					res.redirect('/secret');
-					next();
-				} else {
-					req.flash('errorMsg', 'password did not match');
-					res.redirect('/');
-				}
 			}
-		}
+			else{
+				
+				localStorage.setItem('token', response.body.token);
+				res.redirect('/secret');
+				// next();
+			}
+		});
 	});
 	app.use((request, response, next) => {
 		var token = request.body.token || request.query.token || request.headers['x-access-token'] || localStorage.getItem('token');
@@ -69,24 +62,23 @@ module.exports = (app, passport,logger) => {
 	let i =0;//for saving all photos which user saves(there is another method also which override the current photo)
 	app.post('/create',(req,res) =>{
 		Jimp.read(req.body.url, function (err, image) {
-			if(err){
-				req.flash('errorMsg', 'Error in downloading or provide valid image link');
-				res.redirect('/create');
-			}
 			if(image!=undefined){
 				image.resize(50, 50)            // resize                           
 					.write('public/images/thumbnail'+ i +'.'+image.getExtension(),(err) =>{
 						if(err){
+							logger.error('Error in downloading');
 							req.flash('errorMsg', 'Error in downloading');
 							res.redirect('/create');
 						}
 						var image1 = 'thumbnail'+i+'.'+this.getExtension();
 						i++;
+						logger.info('Downloaded successfully');
 						req.flash('successMsg', 'Downloaded successfully');
 						res.render('create',{image:image1});
 					});
 			}
 			else{
+				logger.error('Link is not valid');
 				req.flash('errorMsg', 'Link is not valid');
 				res.redirect('/create');
      
@@ -102,7 +94,6 @@ module.exports = (app, passport,logger) => {
 	}), (req, res) => {
 		let user = req.user;
 		logger.info(user);
-		logger.error('Warning message');
 		res.render('secret', {
 			user: user
 		});

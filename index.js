@@ -8,9 +8,9 @@ const app = express();
 const logger = require('./utils/logger');
 
 //Middlewares
-
-app.use(passport.initialize());
 require('./config/passport')(passport);
+app.use(passport.initialize());
+
 app.engine('handlebars', exphbs({
 	defaultLayout: 'main'
 }));
@@ -32,6 +32,7 @@ app.use((req, res, next) => {
 	res.locals.error = req.flash('error');
 	next();
 });
+require('./apis/login')(app, passport, logger);
 require('./routes/routes')(app, passport, logger);
 app.listen(3000, () => {
 	logger.info('Express running');
