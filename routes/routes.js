@@ -74,6 +74,7 @@ module.exports = (app, passport,logger) => {
 						i++;
 						logger.info('Downloaded successfully');
 						req.flash('successMsg', 'Downloaded successfully');
+						res.locals.successMsg = req.flash('successMsg');
 						res.render('create',{image:image1});
 					});
 			}
