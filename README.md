@@ -45,7 +45,7 @@ Since it is a mock authentication. You can either use any of these credentials f
 
 ```bash
 name: 'john123',                   
-password: '123'                           
+password: '12345'                           
 ```
 or
 
