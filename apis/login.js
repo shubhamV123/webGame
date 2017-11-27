@@ -31,7 +31,7 @@ module.exports = (app, passport, logger) => {
             if (user === undefined) {
                 res.status(401).json({
                     error:true,
-                    message: 'User not defined'
+                    message: 'User not found'
                 })
 
             } else {

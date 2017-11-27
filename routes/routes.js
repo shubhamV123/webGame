@@ -95,10 +95,15 @@ module.exports = (app, passport,logger) => {
 		session: false
 	}), (req, res) => {
 		let user = req.user;
-		logger.info(user);
-		res.render('secret', {
-			user: user
-		});
+		if(process.env.NODE_ENV == 'test'){
+			return res.json(user)
+		}
+		else{
+			logger.info(user);
+			res.render('secret', {
+				user: user
+			});
+		}
 	});
 	app.get('/patch', passport.authenticate('jwt', {session: false}), (req, res) => {
 		let user = req.user;
