@@ -76,7 +76,7 @@ To run this docker image:
 ```bash
 docker run -p 8081:3000 -d node-web-app((or name which you set))                         
 ```
-##### Note: if docker gives error during any phase try to run as sudo access.
+##### Note: If docker gives error during any phase try to run as sudo access.
 
 ## Test Suite
 This app uses mocha and chai to generate test cases and istanbul for code coverage.
