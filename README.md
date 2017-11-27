@@ -62,6 +62,34 @@ benficial for debugging/monitoring your application.This app logs all your loggi
 
 More information you can find [here](https://github.com/winstonjs/winston)
 
+## Dockerizing this web app
+
+To know more information about how to get a Node.js application into a Docker container.Follow this [link](https://nodejs.org/en/docs/guides/nodejs-docker-webapp/).
+As this app contain docker file you can build your docker image and run this image in docker container.
+To build docker image of this:
+
+```bash
+docker build -t node-web-app(or any name which your want) .                         
+```
+To run this docker image:
+
+```bash
+docker run -p 8081:3000 -d node-web-app((or name which you set))                         
+```
+##### Note: if docker gives error during any phase try to run as sudo access.
+
+## Test Suite
+This app uses mocha and chai to generate test cases and istanbul for code coverage.
+To run test suite:
+```bash
+$ npm test or mocha                        
+```
+
+To run code coverage:
+```bash
+$ npm run coverage                        
+```
+
 ## Extra Notes
 
 To use javascript linter on this project download eslint globally :
