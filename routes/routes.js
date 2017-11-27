@@ -2,16 +2,16 @@ const _ = require('lodash');
 const jwt = require('jsonwebtoken');
 const users = require('../models/user');
 const config = require('../config/config');
-const urlConfig = require('../config/urlConfig');
 const localStorage = require('localStorage');
 const Jimp = require('jimp');
 const jsonpatch = require('fast-json-patch');
-var request = require('request');
+const request = require('request');
+const urlConfig = require('../config/urlConfig');
 
 module.exports = (app, passport,logger) => {
 	app.get('/', (req, res) => {
 		if (localStorage.getItem('token') !== null) {
-			res.redirect('/secret');
+			res.redirect('/profile');
 		} else {
 			res.render('index');
 		}
@@ -23,7 +23,7 @@ module.exports = (app, passport,logger) => {
 			password:req.body.password
 		};
 		request({
-			url: urlConfig.url,
+			url: urlConfig.url+'/api/login',
 			method: 'POST',
 			json: true,   // <--Very important!!!
 			body: name
@@ -35,13 +35,12 @@ module.exports = (app, passport,logger) => {
 			else{
 				
 				localStorage.setItem('token', response.body.token);
-				res.redirect('/secret');
-				// next();
+				res.redirect('/profile');
 			}
 		});
 	});
 	app.use((request, response, next) => {
-		var token = request.body.token || request.query.token || request.headers['x-access-token'] || localStorage.getItem('token');
+		var token =  localStorage.getItem('token');
 		request.headers['authorization'] = token;
 		if (token) {
 			jwt.verify(token, config.jwtSecret, (err, decoded) => {
@@ -91,19 +90,23 @@ module.exports = (app, passport,logger) => {
 		const user = req.user;
 		res.render('create',{user:user});
 	});
-	app.get('/secret', passport.authenticate('jwt', {
-		session: false
-	}), (req, res) => {
-		let user = req.user;
-		if(process.env.NODE_ENV == 'test'){
-			return res.json(user)
-		}
-		else{
-			logger.info(user);
+	app.get('/profile', (req,res) => {
+		var token = req.headers['authorization'];		
+		request({
+			url: urlConfig.url+'/api/secret',
+			method: 'GET',
+			json: true,   // <--Very important!!!
+			headers: {'authorization':token}
+		}, function (error, response){
+			if(error){
+				req.flash('errorMsg', 'Unauthorized');
+				res.redirect('/')
+			}
+			console.log(response.body)
 			res.render('secret', {
-				user: user
+				user: response.body
 			});
-		}
+		})
 	});
 	app.get('/patch', passport.authenticate('jwt', {session: false}), (req, res) => {
 		let user = req.user;
@@ -121,7 +124,7 @@ module.exports = (app, passport,logger) => {
 			user = jsonpatch.applyPatch(user, patches).newDocument;
 			logger.log('successfully added patch');
 		}
-		res.redirect('/secret');
+		res.redirect('/profile');
 	});
 	app.get('/logout', (req, res) => {
 		localStorage.clear();

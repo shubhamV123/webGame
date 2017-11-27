@@ -55,6 +55,9 @@ module.exports = (app, passport, logger) => {
                 }
             }
         }
+    });
+    app.get('/api/secret',passport.authenticate('jwt', {session: false}),(req, res, next) => {
+        res.json(req.user)
     })
     
 }
