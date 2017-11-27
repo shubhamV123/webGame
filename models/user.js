@@ -1,3 +1,5 @@
+//Mock user for authentication
+
 var users = [
     {
       id: 1,

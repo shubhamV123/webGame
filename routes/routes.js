@@ -7,8 +7,9 @@ const localStorage = require('localStorage');
 const jsonpatch = require('fast-json-patch');
 const request = require('request');
 const urlConfig = require('../config/urlConfig');
-
+// All routes for app
 module.exports = (app, passport,logger) => {
+	//Login route
 	app.get('/', (req, res) => {
 		if (localStorage.getItem('token') !== null) {
 			res.redirect('/profile');
@@ -16,7 +17,7 @@ module.exports = (app, passport,logger) => {
 			res.render('index');
 		}
 	});
-
+	//login post route
 	app.post('/login',(req,res,next) =>{
 		var name = {
 			name:req.body.name,
@@ -39,6 +40,7 @@ module.exports = (app, passport,logger) => {
 			}
 		});
 	});
+	//setting middleware for authentication
 	app.use((request, response, next) => {
 		var token =  localStorage.getItem('token');
 		request.headers['authorization'] = token;
@@ -60,6 +62,7 @@ module.exports = (app, passport,logger) => {
 		}
 	});
 	let i =0;//for saving all photos which user saves(there is another method also which override the current photo)
+	//thumbnail post route(this page cant be access without jwt)
 	app.post('/create',(req,res) =>{
 		var token = req.headers['authorization'];
 		var url = {
@@ -84,16 +87,18 @@ module.exports = (app, passport,logger) => {
 			}
 		});
 	});
+	//Front view of thumnail generate or display
 	app.get('/create', passport.authenticate('jwt', {session: false}), (req, res) => {
 		const user = req.user;
 		res.render('create',{user:user});
 	});
+	//Main route after successfully login
 	app.get('/profile', (req,res) => {
 		var token = req.headers['authorization'];		
 		request({
 			url: urlConfig.url+'/api/secret',
 			method: 'GET',
-			json: true,   // <--Very important!!!
+			json: true,   
 			headers: {'authorization':token}
 		}, function (error, response){
 			if(error){
@@ -105,9 +110,11 @@ module.exports = (app, passport,logger) => {
 			});
 		});
 	});
+	//This route contain patch request from user
 	app.get('/patch', passport.authenticate('jwt', {session: false}), (req, res) => {
 		let user = req.user;
 		if(req.user.email!=undefined){
+			//if already patched remove patch
 			logger.error(req.user.email+' is removed');
 			let patches = [
 				{ op: 'remove', path: '/email' },
@@ -116,13 +123,14 @@ module.exports = (app, passport,logger) => {
 			user = jsonpatch.applyPatch(user, patches).newDocument;
 		}
 		else{
-      
+      	//if patch is not done add patch to request
 			let patches = [{op: 'add', path: '/email', value: 'johnChanged@email.com'}];
 			user = jsonpatch.applyPatch(user, patches).newDocument;
 			logger.log('successfully added patch');
 		}
 		res.redirect('/profile');
 	});
+	//route for logout
 	app.get('/logout', (req, res) => {
 		localStorage.clear();
 		res.redirect('/');
