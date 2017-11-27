@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 const users = require('../models/user');
 const config = require('../config/config');
 const localStorage = require('localStorage');
-const Jimp = require('jimp');
+
 const jsonpatch = require('fast-json-patch');
 const request = require('request');
 const urlConfig = require('../config/urlConfig');
@@ -61,28 +61,26 @@ module.exports = (app, passport,logger) => {
 	});
 	let i =0;//for saving all photos which user saves(there is another method also which override the current photo)
 	app.post('/create',(req,res) =>{
-		Jimp.read(req.body.url, function (err, image) {
-			if(image!=undefined){
-				image.resize(50, 50)            // resize                           
-					.write('public/images/thumbnail'+ i +'.'+image.getExtension(),(err) =>{
-						if(err){
-							logger.error('Error in downloading');
-							req.flash('errorMsg', 'Error in downloading');
-							res.redirect('/create');
-						}
-						var image1 = 'thumbnail'+i+'.'+this.getExtension();
-						i++;
-						logger.info('Downloaded successfully');
-						req.flash('successMsg', 'Downloaded successfully');
-						res.locals.successMsg = req.flash('successMsg');
-						res.render('create',{image:image1});
-					});
+		var token = req.headers['authorization'];
+		var url = {
+			url: req.body.url
+		};		
+		request({
+			url: urlConfig.url+'/api/create',
+			method: 'POST',
+			json: true, 
+			body:url,
+			headers: {'authorization':token}
+		}, function (error, response){
+			if(response.body.error == true){
+				req.flash('errorMsg',response.body.msg);
+				res.redirect('/create');
 			}
 			else{
-				logger.error('Link is not valid');
-				req.flash('errorMsg', 'Link is not valid');
-				res.redirect('/create');
-     
+				logger.info('Downloaded successfully');
+				req.flash('successMsg', response.body.msg);
+				res.locals.successMsg = req.flash('successMsg');
+				res.render('create',{image:response.body.image});
 			}
 		});
 	});
@@ -100,13 +98,12 @@ module.exports = (app, passport,logger) => {
 		}, function (error, response){
 			if(error){
 				req.flash('errorMsg', 'Unauthorized');
-				res.redirect('/')
+				res.redirect('/');
 			}
-			console.log(response.body)
 			res.render('secret', {
 				user: response.body
 			});
-		})
+		});
 	});
 	app.get('/patch', passport.authenticate('jwt', {session: false}), (req, res) => {
 		let user = req.user;
