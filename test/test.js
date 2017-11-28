@@ -14,16 +14,17 @@ const loginDetail = {
 	password: '12345'
 };
 const wrongCredential = [{
-	name: '',
-	password:''
-},{
-	name: 'john123',
-	password:'123'
-},
-{
-	name: 'john@123',
-	password:'123'
-}];
+		name: '',
+		password: ''
+	}, {
+		name: 'john123',
+		password: '123'
+	},
+	{
+		name: 'john@123',
+		password: '123'
+	}
+];
 
 describe('/', () => {
 	it('it should show the login page', (done) => {
@@ -42,12 +43,12 @@ describe('Show error', () => {
 			.send(wrongCredential[0])
 			.end((err, res) => {
 				res.should.have.status(200);
-				res.should.be.json; 
-				res.body.should.be.a('object'); 
-				res.body.should.have.property('error'); 
-				res.body.should.have.property('message'); 
-				res.body.error.should.be.true; 
-				res.body.message.should.equal('Please fill all the fields' ); 
+				res.should.be.json;
+				res.body.should.be.a('object');
+				res.body.should.have.property('error');
+				res.body.should.have.property('message');
+				res.body.error.should.be.true;
+				res.body.message.should.equal('Please fill all the fields');
 				logger.info(res.body);
 				done();
 			});
@@ -60,12 +61,12 @@ describe('Show error', () => {
 			.send(wrongCredential[1])
 			.end((err, res) => {
 				res.should.have.status(200);
-				res.should.be.json; 
-				res.body.should.be.a('object'); 
-				res.body.should.have.property('error'); 
-				res.body.should.have.property('message'); 
-				res.body.error.should.be.true; 
-				res.body.message.should.equal('Password must be 4 character length and more'); 
+				res.should.be.json;
+				res.body.should.be.a('object');
+				res.body.should.have.property('error');
+				res.body.should.have.property('message');
+				res.body.error.should.be.true;
+				res.body.message.should.equal('Password must be 4 character length and more');
 				logger.info(res.body);
 				done();
 			});
@@ -78,12 +79,12 @@ describe('Show error', () => {
 			.send(wrongCredential[2])
 			.end((err, res) => {
 				res.should.have.status(200);
-				res.should.be.json; 
-				res.body.should.be.a('object'); 
-				res.body.should.have.property('error'); 
-				res.body.should.have.property('message'); 
-				res.body.error.should.be.true; 
-				res.body.message.should.equal('Only alphabets and numbers are allowed'); 
+				res.should.be.json;
+				res.body.should.be.a('object');
+				res.body.should.have.property('error');
+				res.body.should.have.property('message');
+				res.body.error.should.be.true;
+				res.body.message.should.equal('Only alphabets and numbers are allowed');
 				logger.info(res.body);
 				done();
 			});
@@ -127,7 +128,7 @@ describe('/POST Login', () => {
 				const token = res.body.token;
 				chai.request(urlConfig.url)
 					.get('/api/secret')
-				// we set the auth header with our token
+					// we set the auth header with our token
 					.set('authorization', token)
 					.end((err, res) => {
 						res.should.have.status(200);
