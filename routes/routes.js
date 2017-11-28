@@ -125,4 +125,9 @@ module.exports = (app, passport,logger) => {
 			res.redirect('/profile');
 		});
 	});
+	//logout route
+	app.get('/logout', (req, res) => {
+		localStorage.clear();
+		res.redirect('/');
+	});
 };

@@ -83,6 +83,7 @@ module.exports = (app, passport, logger) => {
 			}
 		});
 	});
+	//Patch api
 	app.patch('/api/patch',passport.authenticate('jwt',{session:false}),(req,res,next) =>{
 		let user = req.user;
 		if(req.user.email!=undefined){
