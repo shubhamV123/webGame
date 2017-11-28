@@ -3,7 +3,6 @@ const jwt = require('jsonwebtoken');
 const users = require('../models/user');
 const config = require('../config/config');
 const localStorage = require('localStorage');
-
 const jsonpatch = require('fast-json-patch');
 const request = require('request');
 const urlConfig = require('../config/urlConfig');
@@ -111,28 +110,19 @@ module.exports = (app, passport,logger) => {
 		});
 	});
 	//This route contain patch request from user
-	app.get('/patch', passport.authenticate('jwt', {session: false}), (req, res) => {
-		let user = req.user;
-		if(req.user.email!=undefined){
-			//if already patched remove patch
-			logger.error(req.user.email+' is removed');
-			let patches = [
-				{ op: 'remove', path: '/email' },
-          
-			];
-			user = jsonpatch.applyPatch(user, patches).newDocument;
-		}
-		else{
-      	//if patch is not done add patch to request
-			let patches = [{op: 'add', path: '/email', value: 'johnChanged@email.com'}];
-			user = jsonpatch.applyPatch(user, patches).newDocument;
-			logger.log('successfully added patch');
-		}
-		res.redirect('/profile');
-	});
-	//route for logout
-	app.get('/logout', (req, res) => {
-		localStorage.clear();
-		res.redirect('/');
+	app.get('/patch', (req, res) => {
+		var token = req.headers['authorization'];		
+		request({
+			url: urlConfig.url+'/api/patch',
+			method: 'PATCH',
+			json: true,   
+			headers: {'authorization':token}
+		}, function (error, response){
+			if(error){
+				req.flash('errorMsg', 'Unauthorized');
+				res.redirect('/');
+			}
+			res.redirect('/profile');
+		});
 	});
 };

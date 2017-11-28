@@ -4,8 +4,10 @@ let users = require('../models/user');
 let config = require('../config/config');
 let localStorage = require('localStorage');
 let Jimp = require('jimp');
+let jsonpatch = require('fast-json-patch');
+
 let i =0;
-const regExp = /^[a-zA-Z0-9]*$/;
+let regExp = /^[a-zA-Z0-9]*$/;
 module.exports = (app, passport, logger) => {
 	// api to check login authentication and genrate token
 	app.post('/api/login',(req, res, next) => {
@@ -81,5 +83,25 @@ module.exports = (app, passport, logger) => {
 			}
 		});
 	});
+	app.patch('/api/patch',passport.authenticate('jwt',{session:false}),(req,res,next) =>{
+		let user = req.user;
+		if(req.user.email!=undefined){
+			//if already patched remove patch
+			logger.error(req.user.email+' is removed');
+			let patches = [
+				{ op: 'remove', path: '/email' },
+          
+			];
+			user = jsonpatch.applyPatch(user, patches).newDocument;
+			res.json(user)
+		}
+		else{
+      	//if patch is not done add patch to request
+			let patches = [{op: 'add', path: '/email', value: 'johnChanged@email.com'}];
+			user = jsonpatch.applyPatch(user, patches).newDocument;
+			res.json(user)
+			// logger.log('successfully added patch');
+		}
+	})
     
 };
