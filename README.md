@@ -13,7 +13,7 @@ Once node installation is done.
 Download or clone the project:
 
 ```bash
-$ git clone https://github.com/shubhamV123/jwt-NodeJS.git
+$ https://github.com/shubhamV123/webGame.git
 ```
 ##### Note: change directory to webGame before going further installation.
 
