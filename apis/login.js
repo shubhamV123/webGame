@@ -64,64 +64,64 @@ module.exports = (app, passport, logger) => {
 	}), (req, res, next) => {
 		res.json(req.user);
 	});
-	//api to create thumbnail of image
-	app.post('/api/create', passport.authenticate('jwt', {
-		session: false
-	}), (req, res, next) => {
-		Jimp.read(req.body.url, function (err, image) {
-			if (image != undefined) {
-				image.resize(50, 50) // resize                           
-					.write('public/images/thumbnail' + i + '.' + image.getExtension(), (err) => {
-						if (err) {
-							res.json({
-								error: true,
-								msg: 'Error in downloading'
-							});
-						}
-						var image1 = 'thumbnail' + i + '.' + this.getExtension();
-						i++;
-						res.json({
-							error: false,
-							msg: 'successfully downloaded',
-							image: image1
-						});
-					});
-			} else {
-				res.json({
-					error: true,
-					msg: 'Link is not valid'
-				});
+	// //api to create thumbnail of image
+	// app.post('/api/create', passport.authenticate('jwt', {
+	// 	session: false
+	// }), (req, res, next) => {
+	// 	Jimp.read(req.body.url, function (err, image) {
+	// 		if (image != undefined) {
+	// 			image.resize(50, 50) // resize                           
+	// 				.write('public/images/thumbnail' + i + '.' + image.getExtension(), (err) => {
+	// 					if (err) {
+	// 						res.json({
+	// 							error: true,
+	// 							msg: 'Error in downloading'
+	// 						});
+	// 					}
+	// 					var image1 = 'thumbnail' + i + '.' + this.getExtension();
+	// 					i++;
+	// 					res.json({
+	// 						error: false,
+	// 						msg: 'successfully downloaded',
+	// 						image: image1
+	// 					});
+	// 				});
+	// 		} else {
+	// 			res.json({
+	// 				error: true,
+	// 				msg: 'Link is not valid'
+	// 			});
 
-			}
-		});
-	});
-	//Patch api
-	app.patch('/api/patch', passport.authenticate('jwt', {
-		session: false
-	}), (req, res, next) => {
-		let user = req.user;
-		if (req.user.email != undefined) {
-			//if already patched remove patch
-			logger.error(req.user.email + ' is removed');
-			let patches = [{
-					op: 'remove',
-					path: '/email'
-				},
+	// 		}
+	// 	});
+	// });
+	// //Patch api
+	// app.patch('/api/patch', passport.authenticate('jwt', {
+	// 	session: false
+	// }), (req, res, next) => {
+	// 	let user = req.user;
+	// 	if (req.user.email != undefined) {
+	// 		//if already patched remove patch
+	// 		logger.error(req.user.email + ' is removed');
+	// 		let patches = [{
+	// 				op: 'remove',
+	// 				path: '/email'
+	// 			},
 
-			];
-			user = jsonpatch.applyPatch(user, patches).newDocument;
-			res.json(user)
-		} else {
-			//if patch is not done add patch to request
-			let patches = [{
-				op: 'add',
-				path: '/email',
-				value: 'johnChanged@email.com'
-			}];
-			user = jsonpatch.applyPatch(user, patches).newDocument;
-			res.json(user)
-			// logger.log('successfully added patch');
-		}
-	})
+	// 		];
+	// 		user = jsonpatch.applyPatch(user, patches).newDocument;
+	// 		res.json(user)
+	// 	} else {
+	// 		//if patch is not done add patch to request
+	// 		let patches = [{
+	// 			op: 'add',
+	// 			path: '/email',
+	// 			value: 'johnChanged@email.com'
+	// 		}];
+	// 		user = jsonpatch.applyPatch(user, patches).newDocument;
+	// 		res.json(user)
+	// 		// logger.log('successfully added patch');
+	// 	}
+	// })
 
 };
