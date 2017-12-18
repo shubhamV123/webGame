@@ -79,15 +79,8 @@ module.exports = (app, passport, logger) => {
 				req.flash('errorMsg', 'Unauthorized');
 				res.redirect('/');
 			}
-			// cards.shuffle(0, function (err, data) {
-			// 	Data = data.deck_id;
-			// 	cards.draw(Data, function (err, data) {
-			// 		// play around with data 
-			// 		console.log(data)
-			// 	  });
-			//   });
 			var Game =  Dealer.shuffle();
-			console.log(Game);
+			// console.log(Game);
 			 
 			res.render('secret', {
 				user: response.body,
