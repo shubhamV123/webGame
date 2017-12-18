@@ -6,6 +6,9 @@ const localStorage = require('localStorage');
 const jsonpatch = require('fast-json-patch');
 const request = require('request');
 const urlConfig = require('../config/urlConfig');
+// const cards = require('node-of-cards');
+var Dealer = require('card-dealer');
+    
 // All routes for app
 module.exports = (app, passport, logger) => {
 	//Login route
@@ -59,44 +62,7 @@ module.exports = (app, passport, logger) => {
 			return response.sendStatus(401);
 		}
 	});
-	let i = 0; //for saving all photos which user saves(there is another method also which override the current photo)
-	//thumbnail post route(this page cant be access without jwt)
-	app.post('/create', (req, res) => {
-		var token = req.headers['authorization'];
-		var url = {
-			url: req.body.url
-		};
-		request({
-			url: urlConfig.url + '/api/create',
-			method: 'POST',
-			json: true,
-			body: url,
-			headers: {
-				'authorization': token
-			}
-		}, function (error, response) {
-			if (response.body.error == true) {
-				req.flash('errorMsg', response.body.msg);
-				res.redirect('/create');
-			} else {
-				logger.info('Downloaded successfully');
-				req.flash('successMsg', response.body.msg);
-				res.locals.successMsg = req.flash('successMsg');
-				res.render('create', {
-					image: response.body.image
-				});
-			}
-		});
-	});
-	//Front view of thumbnail generate or display
-	app.get('/create', passport.authenticate('jwt', {
-		session: false
-	}), (req, res) => {
-		const user = req.user;
-		res.render('create', {
-			user: user
-		});
-	});
+	
 	//Main route after successfully login
 	app.get('/profile', (req, res) => {
 		var token = req.headers['authorization'];
@@ -108,33 +74,28 @@ module.exports = (app, passport, logger) => {
 				'authorization': token
 			}
 		}, function (error, response) {
+			let Data= '';
 			if (error) {
 				req.flash('errorMsg', 'Unauthorized');
 				res.redirect('/');
 			}
+			// cards.shuffle(0, function (err, data) {
+			// 	Data = data.deck_id;
+			// 	cards.draw(Data, function (err, data) {
+			// 		// play around with data 
+			// 		console.log(data)
+			// 	  });
+			//   });
+			var Game =  Dealer.shuffle();
+			console.log(Game);
+			 
 			res.render('secret', {
-				user: response.body
+				user: response.body,
+				random:Game
 			});
 		});
 	});
-	//This route contain patch request from user
-	app.get('/patch', (req, res) => {
-		var token = req.headers['authorization'];
-		request({
-			url: urlConfig.url + '/api/patch',
-			method: 'PATCH',
-			json: true,
-			headers: {
-				'authorization': token
-			}
-		}, function (error, response) {
-			if (error) {
-				req.flash('errorMsg', 'Unauthorized');
-				res.redirect('/');
-			}
-			res.redirect('/profile');
-		});
-	});
+	
 	//logout route
 	app.get('/logout', (req, res) => {
 		localStorage.clear();

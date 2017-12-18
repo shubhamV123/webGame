@@ -1,5 +1,5 @@
 # jwt-NodeJS
-A simple jwt based mock authentication in nodeJs as well as image thumbnail generation from public url.
+A simple jwt based mock authentication in nodeJs as well as poker game.
 [Demo](https://node-jwtauth.herokuapp.com/)
 
 ## Installation
@@ -91,12 +91,4 @@ To run code coverage:
 $ npm run coverage                        
 ```
 
-## Extra Notes
 
-To use javascript linter on this project download eslint globally :
-
-```bash
-npm install -g eslint                          
-```
-
-After that you can lint your application using eslint filename.js
