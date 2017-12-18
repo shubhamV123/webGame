@@ -1,6 +1,6 @@
 # webGame
 A simple jwt based mock authentication in nodeJs as well as poker game.
-
+[Demo](https://floating-headland-47675.herokuapp.com/)
 
 ## Installation
 This is a [Node.js](https://nodejs.org/en/) based application.
@@ -13,9 +13,9 @@ Once node installation is done.
 Download or clone the project:
 
 ```bash
-$ git clone https://github.com/shubhamV123/jwt-NodeJS.git
+$ https://github.com/shubhamV123/webGame.git
 ```
-##### Note: change directory to jwt-NodeJs before going further installation.
+##### Note: change directory to webGame before going further installation.
 
 
 
