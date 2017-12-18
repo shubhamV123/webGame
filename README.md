@@ -1,6 +1,6 @@
-# jwt-NodeJS
+# webGame
 A simple jwt based mock authentication in nodeJs as well as poker game.
-[Demo](https://node-jwtauth.herokuapp.com/)
+
 
 ## Installation
 This is a [Node.js](https://nodejs.org/en/) based application.
