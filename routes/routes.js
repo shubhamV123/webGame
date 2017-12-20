@@ -96,19 +96,22 @@ module.exports = (app, passport, logger) => {
 				});
 			}
 			else{
+				//Checking how many cards Are left in container
 				let spadeLeft = progress.spadesLeft;
 				let clubsLeft = progress.clubsLeft;
 				let heartsLeft = progress.heartsLeft;
 				let diamondsLeft = progress.diamondsLeft;
+				//Checking how many cards are successfully inserted
 				let spadeSuccess = progress.spadesSuccess;
 				let clubsSuccess = progress.clubsSuccess;
 				let heartsSuccess = progress.heartsSuccess;
 				let diamondsSuccess = progress.diamondsSuccess;
+				//Concatenating all cards to one
 				let a= spadeLeft.concat(clubsLeft);
 				let b = heartsLeft.concat(diamondsLeft)
 				let Game = a.concat(b);
 				Game = Game.sort(function() { return 0.5 - Math.random() })
-				
+				//Rendering on client side
 				res.render('secret', {
 					user: response.body,
 					random:Game,
