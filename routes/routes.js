@@ -6,11 +6,12 @@ const localStorage = require('localStorage');
 const jsonpatch = require('fast-json-patch');
 const request = require('request');
 const urlConfig = require('../config/urlConfig');
+const dbConfig = require('../config/dbUrl');
 // const cards = require('node-of-cards');
 var Dealer = require('card-dealer');
 let Progress = require('../models/userProgress');
 var mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/poker', { useMongoClient: true },(err,db) => {
+mongoose.connect(dbConfig.url, { useMongoClient: true },(err,db) => {
 if(err) return err;    
 // console.log(db);
 });

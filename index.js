@@ -34,7 +34,7 @@ app.use((req, res, next) => {
 	res.locals.error = req.flash('error');	
 	next();
 });
-require('./apis/login')(app, passport, logger);
+require('./apis/api')(app, passport, logger);
 require('./routes/routes')(app, passport, logger);
 app.listen(port, () => {
 	logger.info('Express running');
