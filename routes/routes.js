@@ -8,7 +8,13 @@ const request = require('request');
 const urlConfig = require('../config/urlConfig');
 // const cards = require('node-of-cards');
 var Dealer = require('card-dealer');
-    
+let Progress = require('../models/userProgress');
+var mongoose = require('mongoose');
+mongoose.connect('mongodb://localhost/poker', { useMongoClient: true },(err,db) => {
+if(err) return err;    
+// console.log(db);
+});
+mongoose.Promise = global.Promise;  
 // All routes for app
 module.exports = (app, passport, logger) => {
 	//Login route
@@ -79,13 +85,41 @@ module.exports = (app, passport, logger) => {
 				req.flash('errorMsg', 'Unauthorized');
 				res.redirect('/');
 			}
-			var Game =  Dealer.shuffle();
-			// console.log(Game);
+			
+		Progress.findOne({'user':response.body.name}).sort({ field: 'asc', _id: -1 }).limit(1).lean().exec(function(err, progress) {
+			let Game =  Dealer.shuffle();
+			if(progress == null){
+				res.render('secret', {
+					user: response.body,
+					random:Game
+				});
+			}
+			else{
+				let spadeLeft = progress.spadesLeft;
+				let clubsLeft = progress.clubsLeft;
+				let heartsLeft = progress.heartsLeft;
+				let diamondsLeft = progress.diamondsLeft;
+				let spadeSuccess = progress.spadesSuccess;
+				let clubsSuccess = progress.clubsSuccess;
+				let heartsSuccess = progress.heartsSuccess;
+				let diamondsSuccess = progress.diamondsSuccess;
+				let a= spadeLeft.concat(clubsLeft);
+				let b = heartsLeft.concat(diamondsLeft)
+				let Game = a.concat(b);
+				console.log(progress)
+				res.render('secret', {
+					user: response.body,
+					random:Game,
+					hsuccess:heartsSuccess,
+					dsuccess:diamondsSuccess,
+					csuccess:clubsSuccess,
+					spsuccess:spadeSuccess,
+				});
+			}
+			
+		  });
 			 
-			res.render('secret', {
-				user: response.body,
-				random:Game
-			});
+			
 		});
 	});
 	

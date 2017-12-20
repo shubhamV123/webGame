@@ -7,6 +7,8 @@ const flash = require('connect-flash');
 const app = express();
 const logger = require('./utils/logger');
 const port = process.env.PORT || 3000;
+
+
 //Middlewares
 require('./config/passport')(passport);
 app.use(passport.initialize());

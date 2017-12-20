@@ -1,6 +1,7 @@
 let _ = require('lodash');
 let jwt = require('jsonwebtoken');
 let users = require('../models/user');
+let Progress = require('../models/userProgress');
 let config = require('../config/config');
 let localStorage = require('localStorage');
 let Jimp = require('jimp');
@@ -64,6 +65,36 @@ module.exports = (app, passport, logger) => {
 	}), (req, res, next) => {
 		res.json(req.user);
 	});
+	app.post('/api/progress', (req, res) => {
+		console.log(req.body)
+		if(req.body.complete=='true'){
+			console.log('completed full')
+		}
+		else{
+			console.log(req.body.collection.hearts.csuccess)
+		var progress = new Progress({
+			heartsLeft:req.body.collection.hearts.hleft,
+			heartsSuccess:req.body.collection.hearts.hsuccess,
+			clubsLeft: req.body.collection.clubs.cleft,
+			clubsSuccess:req.body.collection.clubs.csuccess,
+			diamondsLeft: req.body.collection.diamonds.dleft,
+			diamondsSuccess:req.body.collection.diamonds.dsuccess,
+			spadesLeft: req.body.collection.spades.sleft,
+			spadesSuccess:req.body.collection.spades.ssuccess,
+			user:req.body.collection.user
+			});
+		progress.save(function (err) {
+			if (err) {
+				console.log(err);
+			} else {
+				console.log('successfully inserted');
+			}
+			return res.json({
+				data: req.body
+			})
+		});
+		}
+	})
 	// //api to create thumbnail of image
 	// app.post('/api/create', passport.authenticate('jwt', {
 	// 	session: false
