@@ -13,7 +13,7 @@ let Progress = require('../models/userProgress');
 var mongoose = require('mongoose');
 mongoose.connect(dbConfig.url, { useMongoClient: true },(err,db) => {
 if(err) return err;    
-// console.log(db);
+console.log(db);
 });
 mongoose.Promise = global.Promise;  
 // All routes for app
