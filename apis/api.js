@@ -65,10 +65,17 @@ module.exports = (app, passport, logger) => {
 	}), (req, res, next) => {
 		res.json(req.user);
 	});
+	app.get('/api/drop', passport.authenticate('jwt', {
+		session: false
+	}), (req, res, next) => {
+		res.json(req.user);
+	});
 	app.post('/api/progress', (req, res) => {
-		console.log(req.body)
+		// logger.log(req.body)
 		if(req.body.complete=='true'){
-			console.log('completed full')
+			console.log('completed full');
+			// Progress.drop();
+
 		}
 		else{
 			console.log(req.body.collection.hearts.csuccess)
@@ -94,7 +101,8 @@ module.exports = (app, passport, logger) => {
 			})
 		});
 		}
-	})
+	});
+	
 	// //api to create thumbnail of image
 	// app.post('/api/create', passport.authenticate('jwt', {
 	// 	session: false

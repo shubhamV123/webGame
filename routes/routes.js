@@ -106,7 +106,8 @@ module.exports = (app, passport, logger) => {
 				let a= spadeLeft.concat(clubsLeft);
 				let b = heartsLeft.concat(diamondsLeft)
 				let Game = a.concat(b);
-				console.log(progress)
+				Game = Game.sort(function() { return 0.5 - Math.random() })
+				
 				res.render('secret', {
 					user: response.body,
 					random:Game,
@@ -122,7 +123,23 @@ module.exports = (app, passport, logger) => {
 			
 		});
 	});
-	
+	app.get('/drop',(req,res) =>{
+		var token = req.headers['authorization'];
+		request({
+			url: urlConfig.url + '/api/drop',
+			method: 'GET',
+			json: true,
+			headers: {
+				'authorization': token
+			}
+		}, function (error, response) {
+			mongoose.connection.db.dropCollection('progresses', function(err, result) {
+				console.log('successfully redirected')
+			});
+			res.redirect('/profile')
+		});
+		
+	})
 	//logout route
 	app.get('/logout', (req, res) => {
 		localStorage.clear();
