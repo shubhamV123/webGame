@@ -11,7 +11,7 @@ const dbConfig = require('../config/dbUrl');
 var Dealer = require('card-dealer');
 let Progress = require('../models/userProgress');
 var mongoose = require('mongoose');
-mongoose.connect(dbConfig.url, { useMongoClient: true },(err,db) => {
+mongoose.connect('mongodb://root:root@ds231245.mlab.com:31245/poker', { useMongoClient: true },(err,db) => {
 if(err) return err;    
 console.log(db);
 });

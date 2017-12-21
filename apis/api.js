@@ -71,7 +71,7 @@ module.exports = (app, passport, logger) => {
 		res.json(req.user);
 	});
 	app.post('/api/progress', (req, res) => {
-		// logger.log(req.body)
+		console.log(req.body.collection)
 		if(req.body.complete=='true'){
 			console.log('completed full');
 			// Progress.drop();
