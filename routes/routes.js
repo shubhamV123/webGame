@@ -11,7 +11,7 @@ const dbConfig = require('../config/dbUrl');
 var Dealer = require('card-dealer');
 let Progress = require('../models/userProgress');
 var mongoose = require('mongoose');
-mongoose.connect('mongodb://root:root@ds231245.mlab.com:31245/poker', { useMongoClient: true },(err,db) => {
+mongoose.connect(dbConfig.url, { useMongoClient: true },(err,db) => {
 if(err) return err;    
 console.log(db);
 });
@@ -92,7 +92,8 @@ module.exports = (app, passport, logger) => {
 			if(progress == null){
 				res.render('secret', {
 					user: response.body,
-					random:Game
+					random:Game,
+					url:urlConfig.url
 				});
 			}
 			else{
@@ -119,6 +120,7 @@ module.exports = (app, passport, logger) => {
 					dsuccess:diamondsSuccess,
 					csuccess:clubsSuccess,
 					spsuccess:spadeSuccess,
+					url:urlConfig.url
 				});
 			}
 			
